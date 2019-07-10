@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { compose } from 'sanctuary';
+import { Nothing } from 'sanctuary-maybe';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { statusToView } from './status';
+import { setStatusToButtons } from './button';
+
+export const AppView = ({ status, setStatus, title }) => (
+  <div className="App">
+    <h1>{title}</h1>
+    {setStatusToButtons(setStatus)}
+    <h2>Click a button, see what happens:</h2>
+    {statusToView(status)}
+  </div>
+);
+
+// Accepts props, then passes along props and state to the view
+// keeping the view agnostic on what is prop and what is state
+const AppState = ({ title, setInitialStatus }) => {
+  const [{ status }, setState] = useState({ status: Nothing });
+  const setStatus = status => setState({ status });
+  useEffect(() => {
+    setInitialStatus(setStatus)
+  }, [setInitialStatus])
+  return { status, setStatus, title };
+};
+
+const App = compose(AppView)(AppState);
 
 export default App;

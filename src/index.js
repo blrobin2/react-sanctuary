@@ -4,7 +4,15 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { setInitialStatus } from './api';
+
+ReactDOM.render(
+  <App
+    title="React + Sanctuary"
+    setInitialStatus={setInitialStatus}
+  />,
+   document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
